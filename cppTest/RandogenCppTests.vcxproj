@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A0CDC838-6C4F-445F-8FBC-1107A0688BA8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  
+
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+        <LanguageStandard>stdcpplatest</LanguageStandard>
+        <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+        <PrecompiledHeader>NotUsing</PrecompiledHeader>
+        <Optimization>Disabled</Optimization>
+        <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+        <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+        <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+        <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+
+
+
+  <ItemGroup>
+      <ClInclude Include="..\app\src\main\cpp\CommonCpp\CommonMathLib.h" />
+      <ClInclude Include="..\app\src\main\cpp\CommonCpp\SortedRollsMaker.h" />
+      <ClInclude Include="..\app\src\main\cpp\WodCpp\WodChanceCounter.h" />
+      <ClInclude Include="..\app\src\main\cpp\WodCpp\WodSuccessCounter.h" />
+      <ClInclude Include="..\app\src\main\cpp\RollAndKeepCpp\RollAndKeepChanceCounter.h" />
+      <ClInclude Include="..\app\src\main\cpp\RollAndKeepCpp\RollAndKeepRulesLib.h" />
+      <ClInclude Include="..\app\src\main\cpp\DndCpp\DndChancesCounter.h" />
+      <ClInclude Include="..\app\src\main\cpp\DndCpp\DndRollButtonTextFormatter.h" />
+      <ClInclude Include="..\app\src\main\cpp\DndCpp\DndRollPair.h" />
+      <ClInclude Include="..\app\src\main\cpp\DndCpp\DndRollRulesLib.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <ClCompile Include="CommonMathLib.test.cpp" />
+      <ClCompile Include="DndChancesCounter.test.cpp" />
+      <ClCompile Include="DndRollButtonTextFormatter.test.cpp" />
+      <ClCompile Include="DndRollRulesLib.test.cpp" />
+      <ClCompile Include="RollAndKeepChanceCounter.test.cpp" />
+      <ClCompile Include="RollAndKeepRulesLib.test.cpp" />
+      <ClCompile Include="SortedRollsMaker.test.cpp" />
+      <ClCompile Include="WodChanceCounter.test.cpp" />
+      <ClCompile Include="WodSuccessCounter.test.cpp" />
+
+      <ClCompile Include="..\app\src\main\cpp\CommonCpp\SortedRollsMaker.cpp" />
+
+      <ClCompile Include="..\app\src\main\cpp\WodCpp\WodChanceCounter.cpp" />
+      <ClCompile Include="..\app\src\main\cpp\WodCpp\WodSuccessCounter.cpp" />
+
+      <ClCompile Include="..\app\src\main\cpp\RollAndKeepCpp\RollAndKeepRulesLib.cpp" />
+      <ClCompile Include="..\app\src\main\cpp\RollAndKeepCpp\RollAndKeepChanceCounter.cpp" />
+
+      <ClCompile Include="..\app\src\main\cpp\DndCpp\DndChancesCounter.cpp" />
+      <ClCompile Include="..\app\src\main\cpp\DndCpp\DndRollButtonTextFormatter.cpp" />
+      <ClCompile Include="..\app\src\main\cpp\DndCpp\DndRollRulesLib.cpp" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+    <Import
+        Project="packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.6\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets"
+
+        Condition="Exists('packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.6\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')"
+    />
+  </ImportGroup>
+
+  <Target
+        Name="EnsureNuGetPackageBuildImports"
+        BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+
+    <Error
+        Condition="!Exists('packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.6\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')"
+
+        Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.6\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets'))" />
+  </Target>
+
+
+</Project>

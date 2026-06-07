@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RandogenCppTests", "RandogenCppTests.vcxproj", "{A0CDC838-6C4F-445F-8FBC-1107A0688BA8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0CDC838-6C4F-445F-8FBC-1107A0688BA8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A0CDC838-6C4F-445F-8FBC-1107A0688BA8}.Debug|Win32.Build.0 = Debug|Win32
+		{A0CDC838-6C4F-445F-8FBC-1107A0688BA8}.Debug|x64.ActiveCfg = Debug|x64
+		{A0CDC838-6C4F-445F-8FBC-1107A0688BA8}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+EndGlobal
