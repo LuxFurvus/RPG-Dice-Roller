@@ -1,8 +1,7 @@
 # RandoGen
 
 [![Platform](https://img.shields.io/badge/platform-Android-brightgreen.svg)](#)
-[![License](https://img.shields.io/badge/license-TBD-lightgrey.svg)](#license)
-[![Status](https://img.shields.io/badge/status-active-blue.svg)](#)
+[![Status](https://img.shields.io/badge/Status-Completed-success)](#)
 
 **RandoGen** is an Android dice roller for tabletop role-playing games.
 
@@ -71,23 +70,21 @@ This helps players estimate possible outcomes before rolling and makes the app u
 
 ## Screenshots
 
-
-```markdown
-![Main Menu](screenshots/phone_1.png)
-![DnD](screenshots/phone_2.png)
-![Roll & Keep](screenshots/phone_3.png)
-![World of Darkness](screenshots/phone_4.png)
-![Settings](screenshots/phone_5.png)
-```
+<p align="center">
+  <img src="screenshots/phone_1.jpg" alt="Main Menu" width="220"/>
+  <img src="screenshots/phone_2.jpg" alt="DnD" width="220"/>
+  <img src="screenshots/phone_3.jpg" alt="Roll & Keep" width="220"/>
+  <img src="screenshots/phone_4.jpg" alt="World of Darkness" width="220"/>
+  <img src="screenshots/phone_5.jpg" alt="Settings" width="220"/>
+</p>
 
 ## Installation
 
-RandoGen is available on RuStore.
-
-> Add the RuStore link here.
+RandoGen is available on RuStore and here.
 
 ```text
 https://www.rustore.ru/catalog/app/com.example.randogen
+https://github.com/LuxFurvus/RPG-Dice-Roller/blob/main/RandoGen4-release.apk
 ```
 
 ## Tech Stack
@@ -95,7 +92,7 @@ https://www.rustore.ru/catalog/app/com.example.randogen
 Update this section with the actual implementation details.
 
 * Platform: Android
-* Language: ั++17, Kotlin
+* Language: ะก++17, Kotlin
 * Minimum Android version: 5
 
 ## Roadmap
