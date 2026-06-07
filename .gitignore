@@ -19,3 +19,4 @@ cppTest/RandogenCppTests/x64/
 cppTest/x64/
 *.user
 .idea/
+*.apk
