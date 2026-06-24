@@ -8,7 +8,7 @@ object AppRollCooldownSettings
     private const val PreferencesName: String = "AppRollCooldownSettings"
     private const val RollCooldownMsKey: String = "RollCooldownMs"
 
-    const val DefaultRollCooldownMs: Long = 1000L
+    const val DefaultRollCooldownMs: Long = 500L
     const val MinRollCooldownMs: Long = 0L
     const val MaxRollCooldownMs: Long = 10000L
 

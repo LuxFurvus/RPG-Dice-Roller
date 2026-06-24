@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.Insets
@@ -25,6 +26,7 @@ abstract class BaseActivity : AppCompatActivity()
         super.onCreate(SavedInstanceState)
 
         enableEdgeToEdge()
+        ApplyKeepScreenOnSetting()
     }
 
     override fun onContentChanged()
@@ -41,6 +43,7 @@ abstract class BaseActivity : AppCompatActivity()
     {
         super.onResume()
 
+        ApplyKeepScreenOnSetting()
         ApplyManualInputSettingForScreen()
     }
 
@@ -55,6 +58,20 @@ abstract class BaseActivity : AppCompatActivity()
     protected fun IsManualInputEnabled(): Boolean
     {
         return AppManualInputSettings.IsManualInputEnabled(this)
+    }
+
+    protected fun ApplyKeepScreenOnSetting()
+    {
+        val IsEnabled: Boolean =
+            AppKeepScreenOnSettings.IsKeepScreenOnEnabled(this)
+
+        if (IsEnabled)
+        {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            return
+        }
+
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     protected fun SetRollButtonText(

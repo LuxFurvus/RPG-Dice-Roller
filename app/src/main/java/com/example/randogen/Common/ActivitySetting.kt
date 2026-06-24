@@ -41,6 +41,18 @@ class ActivitySetting : BaseActivity()
             )
         }
 
+        BindingObj.switchKeepScreenOn.isChecked =
+            AppKeepScreenOnSettings.IsKeepScreenOnEnabled(this)
+
+        BindingObj.switchKeepScreenOn.setOnCheckedChangeListener { _, IsChecked ->
+            AppKeepScreenOnSettings.SetKeepScreenOnEnabled(
+                this,
+                IsChecked
+            )
+
+            ApplyKeepScreenOnSetting()
+        }
+
         SetupRollCooldownSetting()
 
         BindingObj.headerSettingList.buttonHeaderNavigation.setOnClickListener {
