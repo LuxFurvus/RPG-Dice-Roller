@@ -101,10 +101,11 @@ std::pair<std::vector<int>, int> WodSuccessCounter::GetSuccessesNum(
 
     FinalSuccessCount += InModifier;
 
-    const bool HasAutoSuccesses = InModifier > 0;
+    const bool HasSuccessBeforeCancel =
+        SuccessCount > 0 || InModifier > 0;
 
     if (InWithCancel
-        && !HasAutoSuccesses
+        && !HasSuccessBeforeCancel
         && InitialOneCount > 0
         && FinalSuccessCount <= 0)
     {

@@ -73,7 +73,7 @@ TEST(WodChanceCounterTests, GetProbabilityList_Returns_CumulativeSuccessLines_Fo
 
 TEST(WodChanceCounterTests, GetProbabilityList_Returns_BotchAndCumulativeSuccessLines_ForThreeDiceWithCancel)
 {
-    ExpectProbabilityList("B: 19.60%\n1: 74.00%\n2: 42.50%\n3: 12.50%",
+    ExpectProbabilityList("B: 6.10%\n1: 74.00%\n2: 42.50%\n3: 12.50%",
         3, 6, true, false, 0);
 }
 
@@ -82,7 +82,7 @@ TEST(WodChanceCounterTests, GetProbabilityList_Returns_LowerSuccessChance_WhenCa
     ExpectProbabilityList("1: 19.00%\n2: 1.00%",
         2, 10, false, false, 0);
 
-    ExpectProbabilityList("B: 19.00%\n1: 17.00%\n2: 1.00%",
+    ExpectProbabilityList("B: 17.00%\n1: 17.00%\n2: 1.00%",
         2, 10, true, false, 0);
 }
 
@@ -106,7 +106,7 @@ TEST(WodChanceCounterTests, GetProbabilityList_SupportsTenReroll_ForSingleDieAtD
 
 TEST(WodChanceCounterTests, GetProbabilityList_SupportsTenRerollWithCancel_ForRepresentativeInput)
 {
-    ExpectProbabilityList("B: 18.39%\n1: 75.22%\n2: 46.45%\n3: 18.66%\n4: 4.28%\n5: 0.77%\n6: 0.12%",
+    ExpectProbabilityList("B: 6.10%\n1: 75.22%\n2: 46.45%\n3: 18.66%\n4: 4.28%\n5: 0.77%\n6: 0.12%",
         3, 6, true, true, 0);
 }
 

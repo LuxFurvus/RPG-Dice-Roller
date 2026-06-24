@@ -1,5 +1,6 @@
 #include "WodChanceCounter.h"
 
+#include <cmath>
 #include <iomanip>
 #include <sstream>
 
@@ -277,20 +278,17 @@ std::string WodChanceCounter::GetProbabilityList(
 
     if (CanBotch)
     {
-        long double BotchProbability = 0.0L;
+        const long double NoSuccessFaceProbability =
+            static_cast<long double>(InDifficulty - 1) /
+            static_cast<long double>(GlobalSideNumber);
 
-        for (int NetValue = CurrentMinNet; NetValue <= CurrentMaxNet; ++NetValue)
-        {
-            const int ModifiedNetValue = NetValue + InModifier;
+        const long double NoSuccessAndNoOneFaceProbability =
+            static_cast<long double>(InDifficulty - 2) /
+            static_cast<long double>(GlobalSideNumber);
 
-            if (ModifiedNetValue > 0)
-            {
-                continue;
-            }
-
-            BotchProbability +=
-                CurrentHasOneDistribution[NetValue - CurrentMinNet];
-        }
+        const long double BotchProbability =
+            std::pow(NoSuccessFaceProbability, InDiceCount) -
+            std::pow(NoSuccessAndNoOneFaceProbability, InDiceCount);
 
         Entries.emplace_back(-1, BotchProbability);
     }

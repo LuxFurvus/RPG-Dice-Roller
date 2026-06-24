@@ -61,6 +61,9 @@ int CalculateExpectedSuccessCount(
 
     const int InitialOneCount = CountValue(InitialRolls, 1);
 
+    const bool HasSuccessBeforeCancel =
+        SuccessCount > 0 || Modifier > 0;
+
     if (WithCancel)
     {
         SuccessCount -= InitialOneCount;
@@ -68,10 +71,8 @@ int CalculateExpectedSuccessCount(
 
     SuccessCount += Modifier;
 
-    const bool HasAutoSuccesses = Modifier > 0;
-
     if (WithCancel
-        && !HasAutoSuccesses
+        && !HasSuccessBeforeCancel
         && InitialOneCount > 0
         && SuccessCount <= 0)
     {
