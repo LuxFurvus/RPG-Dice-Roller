@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.edit
 import com.example.randogen.WoD.WodNativeBridge
 import com.example.randogen.databinding.MassRollResultBinding
 
@@ -181,8 +182,10 @@ class MassRollResultActivity : BaseActivity()
 {
     private companion object
     {
+        const val PreferencesName: String = "MassRollResultState"
         const val DefaultMassRollCount: Int = 5
         const val SavedResultsTextKey: String = "MassRollResult.ResultsText"
+        const val SavedRollCountKey: String = "MassRollResult.RollCount"
     }
 
     private lateinit var BindingObj: MassRollResultBinding
@@ -210,21 +213,37 @@ class MassRollResultActivity : BaseActivity()
             OnValueChanged = {}
         )
 
-        RollCountStepper.SetValue(DefaultMassRollCount)
+        RollCountStepper.SetValue(
+            GetRestoredRollCount(SavedInstanceState)
+        )
         RollCountStepper.Bind()
         RestoreResultsText(SavedInstanceState)
         ApplyManualInputSettingForScreen()
     }
 
+    override fun onStop()
+    {
+        SavePersistentState()
+
+        super.onStop()
+    }
+
     override fun onSaveInstanceState(
         OutState: Bundle)
     {
-        super.onSaveInstanceState(OutState)
-
         OutState.putString(
             SavedResultsTextKey,
             BindingObj.textMassRollResults.text?.toString().orEmpty()
         )
+
+        OutState.putInt(
+            SavedRollCountKey,
+            RollCountStepper.GetValue()
+        )
+
+        SavePersistentState()
+
+        super.onSaveInstanceState(OutState)
     }
 
     override fun OnRollButtonClicked()
@@ -346,32 +365,16 @@ class MassRollResultActivity : BaseActivity()
                 ?: return null
 
         return FormatMassRollLine(
-            FormatDndRollText(Result.GetResultText()),
+            Result.GetResultText(),
             Result.GetRollSum().toString()
         )
-    }
-
-    private fun FormatDndRollText(
-        ResultText: String): String
-    {
-        return ResultText
-            .lines()
-            .joinToString("; ") { ResultLine ->
-                ResultLine
-                    .removePrefix("* ")
-                    .trim()
-                    .substringBeforeLast(" = ")
-            }
-            .ifBlank {
-                "Modifier"
-            }
     }
 
     private fun FormatMassRollLine(
         RollText: String,
         ResultText: String): String
     {
-        return "$RollText = $ResultText"
+        return "$RollText\n>> $ResultText"
     }
 
     private fun RestoreResultsText(
@@ -380,11 +383,105 @@ class MassRollResultActivity : BaseActivity()
         val SavedResultsText: String =
             SavedInstanceState
                 ?.getString(SavedResultsTextKey)
+                ?: GetPreferences()
+                    .getString(
+                        GetResultsTextPreferenceKey(),
+                        null
+                    )
                 ?: return
 
         BindingObj.textMassRollResults.text =
             SavedResultsText.ifBlank {
                 getString(R.string.data_empty)
             }
+    }
+
+    private fun GetRestoredRollCount(
+        SavedInstanceState: Bundle?): Int
+    {
+        return SavedInstanceState
+            ?.getInt(SavedRollCountKey)
+            ?: GetPreferences()
+                .getInt(
+                    GetRollCountPreferenceKey(),
+                    DefaultMassRollCount
+                )
+    }
+
+    private fun SavePersistentState()
+    {
+        if (!::BindingObj.isInitialized || !::RollCountStepper.isInitialized)
+        {
+            return
+        }
+
+        GetPreferences().edit {
+            putString(
+                GetResultsTextPreferenceKey(),
+                BindingObj.textMassRollResults.text?.toString().orEmpty()
+            )
+
+            putInt(
+                GetRollCountPreferenceKey(),
+                RollCountStepper.GetValue()
+            )
+        }
+    }
+
+    private fun GetPreferences() =
+        getSharedPreferences(
+            PreferencesName,
+            Context.MODE_PRIVATE
+        )
+
+    private fun GetResultsTextPreferenceKey(): String
+    {
+        return "${GetPersistentStateKey()}.ResultsText"
+    }
+
+    private fun GetRollCountPreferenceKey(): String
+    {
+        return "${GetPersistentStateKey()}.RollCount"
+    }
+
+    private fun GetPersistentStateKey(): String
+    {
+        val IntentObj: Intent = intent
+
+        if (MassRollResultContract.IsWodMode(IntentObj))
+        {
+            return listOf(
+                "Wod",
+                MassRollResultContract.GetDiceCount(IntentObj),
+                MassRollResultContract.GetDifficulty(IntentObj),
+                MassRollResultContract.GetWithCancel(IntentObj),
+                MassRollResultContract.GetWithTenReroll(IntentObj),
+                MassRollResultContract.GetModifier(IntentObj)
+            ).joinToString("|")
+        }
+
+        if (MassRollResultContract.IsRollAndKeepMode(IntentObj))
+        {
+            return listOf(
+                "RollAndKeep",
+                MassRollResultContract.GetRollNum(IntentObj),
+                MassRollResultContract.GetKeepNum(IntentObj),
+                MassRollResultContract.GetBonus(IntentObj),
+                MassRollResultContract.GetExplodeTens(IntentObj),
+                MassRollResultContract.GetExplodeOnes(IntentObj)
+            ).joinToString("|")
+        }
+
+        if (MassRollResultContract.IsDndMode(IntentObj))
+        {
+            return listOf(
+                "Dnd",
+                MassRollResultContract.GetDiceCounts(IntentObj).joinToString(","),
+                MassRollResultContract.GetSideNumbers(IntentObj).joinToString(","),
+                MassRollResultContract.GetModifier(IntentObj)
+            ).joinToString("|")
+        }
+
+        return "Default"
     }
 }
