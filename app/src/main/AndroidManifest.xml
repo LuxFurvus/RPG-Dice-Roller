@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RandoGen">
         <activity
+            android:name=".MassRollResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".ActivitySetting"
             android:exported="false" />
         <activity

@@ -36,6 +36,7 @@ abstract class BaseActivity : AppCompatActivity()
         ApplySafeAreaInsetsIfPresent()
         BindOrientationButtonIfPresent()
         BindSettingsButtonIfPresent()
+        BindMassRollButtonIfPresent()
         BindRollButtonIfPresent()
     }
 
@@ -180,6 +181,26 @@ abstract class BaseActivity : AppCompatActivity()
         )
 
         startActivity(IntentObj)
+    }
+
+    protected fun OpenMassRollResultActivity()
+    {
+        val IntentObj = Intent(
+            this,
+            MassRollResultActivity::class.java
+        )
+
+        startActivity(IntentObj)
+    }
+
+    private fun BindMassRollButtonIfPresent()
+    {
+        val MassRollButton: View? =
+            findViewById(R.id.buttonMassRoll)
+
+        MassRollButton?.setOnClickListener {
+            OpenMassRollResultActivity()
+        }
     }
 
     protected fun ToggleOrientation()
