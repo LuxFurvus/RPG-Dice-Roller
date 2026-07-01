@@ -72,6 +72,26 @@
                 app:pressedTranslationZ="10dp"
                 app:rippleColor="@color/ripple_color" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonMassRoll"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:contentDescription="@string/label_minus"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                app:backgroundTint="@color/screen_background"
+                app:cornerRadius="22dp"
+                app:elevation="6dp"
+                app:icon="@android:drawable/ic_dialog_dialer"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:pressedTranslationZ="10dp"
+                app:rippleColor="@color/ripple_color" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/valueResultSum"
                 android:layout_width="0dp"
