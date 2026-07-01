@@ -182,6 +182,7 @@ class MassRollResultActivity : BaseActivity()
     private companion object
     {
         const val DefaultMassRollCount: Int = 5
+        const val SavedResultsTextKey: String = "MassRollResult.ResultsText"
     }
 
     private lateinit var BindingObj: MassRollResultBinding
@@ -211,7 +212,19 @@ class MassRollResultActivity : BaseActivity()
 
         RollCountStepper.SetValue(DefaultMassRollCount)
         RollCountStepper.Bind()
+        RestoreResultsText(SavedInstanceState)
         ApplyManualInputSettingForScreen()
+    }
+
+    override fun onSaveInstanceState(
+        OutState: Bundle)
+    {
+        super.onSaveInstanceState(OutState)
+
+        OutState.putString(
+            SavedResultsTextKey,
+            BindingObj.textMassRollResults.text?.toString().orEmpty()
+        )
     }
 
     override fun OnRollButtonClicked()
@@ -239,8 +252,8 @@ class MassRollResultActivity : BaseActivity()
             RollCountStepper.GetValue()
 
         val ResultLines: List<String> =
-            (1..RollCount).mapNotNull { RollIndex ->
-                BuildMassRollLine(RollIndex)
+            (1..RollCount).mapNotNull {
+                BuildMassRollLine()
             }
 
         BindingObj.textMassRollResults.text =
@@ -258,28 +271,26 @@ class MassRollResultActivity : BaseActivity()
         }
     }
 
-    private fun BuildMassRollLine(
-        RollIndex: Int): String?
+    private fun BuildMassRollLine(): String?
     {
         val IntentObj: Intent = intent
 
         return when
         {
             MassRollResultContract.IsWodMode(IntentObj) ->
-                BuildWodMassRollLine(RollIndex, IntentObj)
+                BuildWodMassRollLine(IntentObj)
 
             MassRollResultContract.IsRollAndKeepMode(IntentObj) ->
-                BuildRollAndKeepMassRollLine(RollIndex, IntentObj)
+                BuildRollAndKeepMassRollLine(IntentObj)
 
             MassRollResultContract.IsDndMode(IntentObj) ->
-                BuildDndMassRollLine(RollIndex, IntentObj)
+                BuildDndMassRollLine(IntentObj)
 
             else -> null
         }
     }
 
     private fun BuildWodMassRollLine(
-        RollIndex: Int,
         IntentObj: Intent): String?
     {
         val Result: RollResults =
@@ -294,7 +305,6 @@ class MassRollResultActivity : BaseActivity()
                 ?: return null
 
         return FormatMassRollLine(
-            RollIndex,
             DiceUiHelper.GetRollSequenceText(Result.GetRollSequence()),
             DiceUiHelper.GetSuccessNumText(
                 Result.GetSuccessNum(),
@@ -304,7 +314,6 @@ class MassRollResultActivity : BaseActivity()
     }
 
     private fun BuildRollAndKeepMassRollLine(
-        RollIndex: Int,
         IntentObj: Intent): String?
     {
         val Result: RollResults =
@@ -319,14 +328,12 @@ class MassRollResultActivity : BaseActivity()
                 ?: return null
 
         return FormatMassRollLine(
-            RollIndex,
             DiceUiHelper.GetRollSequenceText(Result.GetRollSequence()),
             Result.GetRollSum().toString()
         )
     }
 
     private fun BuildDndMassRollLine(
-        RollIndex: Int,
         IntentObj: Intent): String?
     {
         val Result: DndRollResults =
@@ -339,7 +346,6 @@ class MassRollResultActivity : BaseActivity()
                 ?: return null
 
         return FormatMassRollLine(
-            RollIndex,
             FormatDndRollText(Result.GetResultText()),
             Result.GetRollSum().toString()
         )
@@ -362,10 +368,23 @@ class MassRollResultActivity : BaseActivity()
     }
 
     private fun FormatMassRollLine(
-        RollIndex: Int,
         RollText: String,
         ResultText: String): String
     {
-        return "$RollIndex] $RollText = $ResultText"
+        return "$RollText = $ResultText"
+    }
+
+    private fun RestoreResultsText(
+        SavedInstanceState: Bundle?)
+    {
+        val SavedResultsText: String =
+            SavedInstanceState
+                ?.getString(SavedResultsTextKey)
+                ?: return
+
+        BindingObj.textMassRollResults.text =
+            SavedResultsText.ifBlank {
+                getString(R.string.data_empty)
+            }
     }
 }
