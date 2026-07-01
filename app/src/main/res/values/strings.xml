@@ -34,7 +34,7 @@
     <string name="label_dark_theme">Dark Theme</string>
     <string name="label_manual_input">Manual Input</string>
     <string name="label_keep_screen_on">Keep Screen On</string>
-    <string name="label_version">Version: 5</string>
+    <string name="label_version">Version: 6</string>
     <string name="label_roll_cooldown_ms">Roll Cooldown (ms)</string>
 
 </resources>
