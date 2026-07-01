@@ -62,6 +62,28 @@ class RollAndKeepActivity : BaseActivity()
         ReactOnRollButtonPressed()
     }
 
+    override fun OpenMassRollResultActivity()
+    {
+        if (!::RollNumStepper.isInitialized)
+        {
+            super.OpenMassRollResultActivity()
+            return
+        }
+
+        ClampAllInputs()
+
+        startActivity(
+            MassRollResultContract.CreateRollAndKeepIntent(
+                this,
+                GetRollNumValue(),
+                GetKeepNumValue(),
+                GetBonusNumValue(),
+                GetExplodeTensCheckBox().isChecked,
+                GetExplodeOnesCheckBox().isChecked
+            )
+        )
+    }
+
     override fun ApplyManualInputSettingForScreen()
     {
         if (!::RollNumStepper.isInitialized)

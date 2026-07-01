@@ -108,6 +108,28 @@ class WodActivity : BaseActivity()
         ReactOnRollButtonPressed()
     }
 
+    override fun OpenMassRollResultActivity()
+    {
+        if (!::InputController.isInitialized)
+        {
+            super.OpenMassRollResultActivity()
+            return
+        }
+
+        InputController.ClampAll()
+
+        startActivity(
+            MassRollResultContract.CreateWodIntent(
+                this,
+                InputController.GetDiceNumberValue(),
+                InputController.GetDifficultyValue(),
+                InputController.IsCancelEnabled(),
+                InputController.IsTenRerollEnabled(),
+                InputController.GetModifierValue()
+            )
+        )
+    }
+
     override fun ApplyManualInputSettingForScreen()
     {
         if (!::InputController.isInitialized)

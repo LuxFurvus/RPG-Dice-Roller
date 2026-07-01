@@ -77,6 +77,26 @@ class DndActivity : BaseActivity()
         ReactOnRollButtonPressed()
     }
 
+    override fun OpenMassRollResultActivity()
+    {
+        if (!::AllSteppers.isInitialized)
+        {
+            super.OpenMassRollResultActivity()
+            return
+        }
+
+        ClampAllInputs()
+
+        startActivity(
+            MassRollResultContract.CreateDndIntent(
+                this,
+                BuildDiceCounts(),
+                BuildSideNumbers(),
+                GetBonusNumValue()
+            )
+        )
+    }
+
     override fun ApplyManualInputSettingForScreen()
     {
         if (!::AllSteppers.isInitialized)

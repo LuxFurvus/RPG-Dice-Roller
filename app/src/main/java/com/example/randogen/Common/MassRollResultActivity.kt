@@ -1,10 +1,189 @@
 package com.example.randogen
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import com.example.randogen.WoD.WodNativeBridge
 import com.example.randogen.databinding.MassRollResultBinding
+
+object MassRollResultContract
+{
+    private const val ExtraMode: String = "MassRollResult.Mode"
+
+    private const val ModeWod: String = "Wod"
+    private const val ModeRollAndKeep: String = "RollAndKeep"
+    private const val ModeDnd: String = "Dnd"
+
+    private const val ExtraDiceCount: String = "MassRollResult.DiceCount"
+    private const val ExtraDifficulty: String = "MassRollResult.Difficulty"
+    private const val ExtraWithCancel: String = "MassRollResult.WithCancel"
+    private const val ExtraWithTenReroll: String = "MassRollResult.WithTenReroll"
+    private const val ExtraModifier: String = "MassRollResult.Modifier"
+
+    private const val ExtraRollNum: String = "MassRollResult.RollNum"
+    private const val ExtraKeepNum: String = "MassRollResult.KeepNum"
+    private const val ExtraBonus: String = "MassRollResult.Bonus"
+    private const val ExtraExplodeTens: String = "MassRollResult.ExplodeTens"
+    private const val ExtraExplodeOnes: String = "MassRollResult.ExplodeOnes"
+
+    private const val ExtraDiceCounts: String = "MassRollResult.DiceCounts"
+    private const val ExtraSideNumbers: String = "MassRollResult.SideNumbers"
+
+    fun CreateWodIntent(
+        ContextObj: Context,
+        DiceCount: Int,
+        Difficulty: Int,
+        WithCancel: Boolean,
+        WithTenReroll: Boolean,
+        Modifier: Int): Intent
+    {
+        return Intent(ContextObj, MassRollResultActivity::class.java).apply {
+            putExtra(ExtraMode, ModeWod)
+            putExtra(ExtraDiceCount, DiceCount)
+            putExtra(ExtraDifficulty, Difficulty)
+            putExtra(ExtraWithCancel, WithCancel)
+            putExtra(ExtraWithTenReroll, WithTenReroll)
+            putExtra(ExtraModifier, Modifier)
+        }
+    }
+
+    fun CreateRollAndKeepIntent(
+        ContextObj: Context,
+        RollNum: Int,
+        KeepNum: Int,
+        Bonus: Int,
+        ExplodeTens: Boolean,
+        ExplodeOnes: Boolean): Intent
+    {
+        return Intent(ContextObj, MassRollResultActivity::class.java).apply {
+            putExtra(ExtraMode, ModeRollAndKeep)
+            putExtra(ExtraRollNum, RollNum)
+            putExtra(ExtraKeepNum, KeepNum)
+            putExtra(ExtraBonus, Bonus)
+            putExtra(ExtraExplodeTens, ExplodeTens)
+            putExtra(ExtraExplodeOnes, ExplodeOnes)
+        }
+    }
+
+    fun CreateDndIntent(
+        ContextObj: Context,
+        DiceCounts: IntArray,
+        SideNumbers: IntArray,
+        Modifier: Int): Intent
+    {
+        return Intent(ContextObj, MassRollResultActivity::class.java).apply {
+            putExtra(ExtraMode, ModeDnd)
+            putExtra(ExtraDiceCounts, DiceCounts)
+            putExtra(ExtraSideNumbers, SideNumbers)
+            putExtra(ExtraModifier, Modifier)
+        }
+    }
+
+    fun GetMode(
+        IntentObj: Intent): String?
+    {
+        return IntentObj.getStringExtra(ExtraMode)
+    }
+
+    fun IsWodMode(
+        IntentObj: Intent): Boolean
+    {
+        return GetMode(IntentObj) == ModeWod
+    }
+
+    fun IsRollAndKeepMode(
+        IntentObj: Intent): Boolean
+    {
+        return GetMode(IntentObj) == ModeRollAndKeep
+    }
+
+    fun IsDndMode(
+        IntentObj: Intent): Boolean
+    {
+        return GetMode(IntentObj) == ModeDnd
+    }
+
+    fun GetDiceCount(
+        IntentObj: Intent): Int
+    {
+        return IntentObj.getIntExtra(ExtraDiceCount, 4)
+    }
+
+    fun GetDifficulty(
+        IntentObj: Intent): Int
+    {
+        return IntentObj.getIntExtra(ExtraDifficulty, 6)
+    }
+
+    fun GetWithCancel(
+        IntentObj: Intent): Boolean
+    {
+        return IntentObj.getBooleanExtra(ExtraWithCancel, true)
+    }
+
+    fun GetWithTenReroll(
+        IntentObj: Intent): Boolean
+    {
+        return IntentObj.getBooleanExtra(ExtraWithTenReroll, false)
+    }
+
+    fun GetModifier(
+        IntentObj: Intent): Int
+    {
+        return IntentObj.getIntExtra(ExtraModifier, 0)
+    }
+
+    fun GetRollNum(
+        IntentObj: Intent): Int
+    {
+        return IntentObj.getIntExtra(ExtraRollNum, 2)
+    }
+
+    fun GetKeepNum(
+        IntentObj: Intent): Int
+    {
+        return IntentObj.getIntExtra(ExtraKeepNum, 1)
+    }
+
+    fun GetBonus(
+        IntentObj: Intent): Int
+    {
+        return IntentObj.getIntExtra(ExtraBonus, 0)
+    }
+
+    fun GetExplodeTens(
+        IntentObj: Intent): Boolean
+    {
+        return IntentObj.getBooleanExtra(ExtraExplodeTens, true)
+    }
+
+    fun GetExplodeOnes(
+        IntentObj: Intent): Boolean
+    {
+        return IntentObj.getBooleanExtra(ExtraExplodeOnes, false)
+    }
+
+    fun GetDiceCounts(
+        IntentObj: Intent): IntArray
+    {
+        return IntentObj.getIntArrayExtra(ExtraDiceCounts) ?: intArrayOf(1)
+    }
+
+    fun GetSideNumbers(
+        IntentObj: Intent): IntArray
+    {
+        return IntentObj.getIntArrayExtra(ExtraSideNumbers) ?: intArrayOf(4)
+    }
+}
 
 class MassRollResultActivity : BaseActivity()
 {
+    private companion object
+    {
+        const val DefaultMassRollCount: Int = 5
+    }
+
     private lateinit var BindingObj: MassRollResultBinding
     private lateinit var RollCountStepper: NumberStepperController
 
@@ -30,9 +209,14 @@ class MassRollResultActivity : BaseActivity()
             OnValueChanged = {}
         )
 
-        RollCountStepper.SetValue(1)
+        RollCountStepper.SetValue(DefaultMassRollCount)
         RollCountStepper.Bind()
         ApplyManualInputSettingForScreen()
+    }
+
+    override fun OnRollButtonClicked()
+    {
+        RunMassRolls()
     }
 
     override fun ApplyManualInputSettingForScreen()
@@ -45,5 +229,143 @@ class MassRollResultActivity : BaseActivity()
         RollCountStepper.SetManualInputEnabled(
             IsManualInputEnabled()
         )
+    }
+
+    private fun RunMassRolls()
+    {
+        RollCountStepper.Clamp()
+
+        val RollCount: Int =
+            RollCountStepper.GetValue()
+
+        val ResultLines: List<String> =
+            (1..RollCount).mapNotNull { RollIndex ->
+                BuildMassRollLine(RollIndex)
+            }
+
+        BindingObj.textMassRollResults.text =
+            if (ResultLines.isEmpty())
+            {
+                getString(R.string.data_empty)
+            }
+            else
+            {
+                ResultLines.joinToString("\n\n")
+            }
+
+        BindingObj.scrollMassRollResults.post {
+            BindingObj.scrollMassRollResults.fullScroll(View.FOCUS_DOWN)
+        }
+    }
+
+    private fun BuildMassRollLine(
+        RollIndex: Int): String?
+    {
+        val IntentObj: Intent = intent
+
+        return when
+        {
+            MassRollResultContract.IsWodMode(IntentObj) ->
+                BuildWodMassRollLine(RollIndex, IntentObj)
+
+            MassRollResultContract.IsRollAndKeepMode(IntentObj) ->
+                BuildRollAndKeepMassRollLine(RollIndex, IntentObj)
+
+            MassRollResultContract.IsDndMode(IntentObj) ->
+                BuildDndMassRollLine(RollIndex, IntentObj)
+
+            else -> null
+        }
+    }
+
+    private fun BuildWodMassRollLine(
+        RollIndex: Int,
+        IntentObj: Intent): String?
+    {
+        val Result: RollResults =
+            WodNativeBridge.GetRollResultsJNI(
+                MassRollResultContract.GetDiceCount(IntentObj),
+                MassRollResultContract.GetDifficulty(IntentObj),
+                MassRollResultContract.GetWithCancel(IntentObj),
+                MassRollResultContract.GetWithTenReroll(IntentObj),
+                MassRollResultContract.GetModifier(IntentObj),
+                RollResults::class.java
+            )
+                ?: return null
+
+        return FormatMassRollLine(
+            RollIndex,
+            DiceUiHelper.GetRollSequenceText(Result.GetRollSequence()),
+            DiceUiHelper.GetSuccessNumText(
+                Result.GetSuccessNum(),
+                MassRollResultContract.GetWithCancel(IntentObj)
+            )
+        )
+    }
+
+    private fun BuildRollAndKeepMassRollLine(
+        RollIndex: Int,
+        IntentObj: Intent): String?
+    {
+        val Result: RollResults =
+            RollAndKeepNativeBridge.GetRollAndKeepResultsJNI(
+                MassRollResultContract.GetRollNum(IntentObj),
+                MassRollResultContract.GetKeepNum(IntentObj),
+                MassRollResultContract.GetBonus(IntentObj),
+                MassRollResultContract.GetExplodeTens(IntentObj),
+                MassRollResultContract.GetExplodeOnes(IntentObj),
+                RollResults::class.java
+            )
+                ?: return null
+
+        return FormatMassRollLine(
+            RollIndex,
+            DiceUiHelper.GetRollSequenceText(Result.GetRollSequence()),
+            Result.GetRollSum().toString()
+        )
+    }
+
+    private fun BuildDndMassRollLine(
+        RollIndex: Int,
+        IntentObj: Intent): String?
+    {
+        val Result: DndRollResults =
+            DndNativeBridge.GetDndRollResultsJNI(
+                MassRollResultContract.GetDiceCounts(IntentObj),
+                MassRollResultContract.GetSideNumbers(IntentObj),
+                MassRollResultContract.GetModifier(IntentObj),
+                DndRollResults::class.java
+            )
+                ?: return null
+
+        return FormatMassRollLine(
+            RollIndex,
+            FormatDndRollText(Result.GetResultText()),
+            Result.GetRollSum().toString()
+        )
+    }
+
+    private fun FormatDndRollText(
+        ResultText: String): String
+    {
+        return ResultText
+            .lines()
+            .joinToString("; ") { ResultLine ->
+                ResultLine
+                    .removePrefix("* ")
+                    .trim()
+                    .substringBeforeLast(" = ")
+            }
+            .ifBlank {
+                "Modifier"
+            }
+    }
+
+    private fun FormatMassRollLine(
+        RollIndex: Int,
+        RollText: String,
+        ResultText: String): String
+    {
+        return "$RollIndex] $RollText = $ResultText"
     }
 }

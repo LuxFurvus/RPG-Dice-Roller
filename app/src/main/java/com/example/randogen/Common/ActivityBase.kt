@@ -183,7 +183,7 @@ abstract class BaseActivity : AppCompatActivity()
         startActivity(IntentObj)
     }
 
-    protected fun OpenMassRollResultActivity()
+    protected open fun OpenMassRollResultActivity()
     {
         val IntentObj = Intent(
             this,
